@@ -6,6 +6,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import http from 'http';
 import morgan from 'morgan';
+import { Server } from 'socket.io';
 
 import responseHelper from './helpers/response-helper';
 import routes from './routes';
@@ -55,3 +56,14 @@ const PORT: unknown = process.env.PORT ?? 3000;
 httpServer.listen(PORT, () => {
   console.log(`🚀 Server bootstrapped on port ${PORT}`);
 });
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+  },
+});
+
+export const socket = io;
+
+// eslint-disable-next-line import/first
+import './sockets/orders';
